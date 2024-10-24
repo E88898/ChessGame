@@ -6,7 +6,7 @@
 class QPushButton;
 class QGridLayout;
 class Pieces;
-
+// es em
 class Chessboard : public QWidget {
 public:
     Chessboard(QWidget* parent);
