@@ -19,16 +19,16 @@ QVector<std::pair<int,int>> Bishop::canMove() const  {
                 j = -1;
             }
         }
-        if(k < 8) {
-            if(Chessboard::figures[i][k]->getCoordinates().first == -1) {
-                v.push_back({i,k});
-            } else if(this->getColor() != Chessboard::figures[i][k]->getColor()) {
-                v.push_back({i,k});
-                k = 8;
-            } else {
-                k = 8;
-            }
-        }
+        // if(k < 8) {
+        //     if(Chessboard::figures[i][k]->getCoordinates().first == -1) {
+        //         v.push_back({i,k});
+        //     } else if(this->getColor() != Chessboard::figures[i][k]->getColor()) {
+        //         v.push_back({i,k});
+        //         k = 8;
+        //     } else {
+        //         k = 8;
+        //     }
+        // }
         --j;
         ++k;
     }
