@@ -11,7 +11,7 @@ QVector<std::pair<int,int>> Pawn::canMove(const std::vector<std::vector<std::pai
 
         if(x == 1) {
 
-            if(squares[x + 2][y].second->getColor() == Color::None) {
+            if(squares[x + 1][y].second->getColor() == Color::None && squares[x + 2][y].second->getColor() == Color::None) {
                 v.push_back({x+2,y});
             }
         }
@@ -35,7 +35,7 @@ QVector<std::pair<int,int>> Pawn::canMove(const std::vector<std::vector<std::pai
     if(this->getColor() == Color::White) {
 
         if(x == 6) {
-            if(squares[x - 2][y].second->getColor() == Color::None) {
+            if(squares[x - 1][y].second->getColor() == Color::None && squares[x - 2][y].second->getColor() == Color::None) {
                 v.push_back({x-2,y});
             }
         }

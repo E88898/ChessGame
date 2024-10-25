@@ -217,7 +217,7 @@ void Chessboard::pawnPromotion(Pawn* piece, int row, int col) {
 
 
 void Chessboard::whereToMove() {
-    QColor backGroundColor;
+    QString backGroundColor;
     QString baseStyle = R"(QPushButton {
                           border: 1px solid white;
                           background-color: %1;
@@ -234,10 +234,10 @@ void Chessboard::whereToMove() {
         } else {
             backGroundColor = "#868482";
         }
-        squares[activeCoordinates[i].first][activeCoordinates[i].second].first->setStyleSheet(baseStyle.arg(backGroundColor.name()));
+        squares[activeCoordinates[i].first][activeCoordinates[i].second].first->setStyleSheet(baseStyle.arg(backGroundColor));
     }
     backGroundColor = "#FDFD96";
-    squares[activePiece->getCoordinates().first][activePiece->getCoordinates().second].first->setStyleSheet(baseStyle.arg(backGroundColor.name()));
+    squares[activePiece->getCoordinates().first][activePiece->getCoordinates().second].first->setStyleSheet(baseStyle.arg(backGroundColor));
 }
 
 
@@ -257,7 +257,6 @@ void Chessboard::undoWhereToMove() {
     } else {
         backGroundColor = "#b58863";
     }
-    // squares[activePiece->getCoordinates().first][activePiece->getCoordinates().second].first->setStyleSheet("");
 
     for(int i = 0; i < activeCoordinates.size(); ++i) {
         int row = activeCoordinates[i].first;
