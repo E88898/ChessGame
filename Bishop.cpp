@@ -26,7 +26,7 @@ QVector<std::pair<int,int>> Bishop::canMove(const std::vector<std::vector<std::p
                 v.push_back({i,k});
                 k = 8;
             } else {
-                j = 8;
+                k = 8;
             }
         }
         --j;
@@ -52,7 +52,7 @@ QVector<std::pair<int,int>> Bishop::canMove(const std::vector<std::vector<std::p
                 v.push_back({i,k});
                 k = 8;
             } else {
-                j = 8;
+                k = 8;
             }
         }
         --j;

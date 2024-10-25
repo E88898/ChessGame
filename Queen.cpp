@@ -25,7 +25,7 @@ QVector<std::pair<int,int>> Queen::canMove(const std::vector<std::vector<std::pa
                 v.push_back({i,k});
                 k = 8;
             } else {
-                j = 8;
+                k = 8;
             }
         }
         --j;
@@ -51,7 +51,7 @@ QVector<std::pair<int,int>> Queen::canMove(const std::vector<std::vector<std::pa
                 v.push_back({i,k});
                 k = 8;
             } else {
-                j = 8;
+                k = 8;
             }
         }
         --j;
