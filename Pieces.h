@@ -16,7 +16,6 @@ public:
     virtual QVector<std::pair<int,int>> canMove() const = 0;
     Color getColor() const { return color; }
     std::pair<int,int> getCoordinates() const { return data; }
-
 private:
     Color color;
     std::pair<int,int> data;
