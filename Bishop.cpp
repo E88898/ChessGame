@@ -3,16 +3,16 @@
 
 Bishop::Bishop(Color color, int x, int y) : Pieces{color,x,y}   {};
 
-QVector<std::pair<int,int>> Bishop::canMove() const  {
+QVector<std::pair<int,int>> Bishop::canMove(const std::vector<std::vector<std::pair<QPushButton*,Pieces*>>>& squares) const  {
     int x = Pieces::getCoordinates().first, y = Pieces::getCoordinates().second;
     QVector<std::pair<int,int>> v;
 
     int j = y - 1, k = y + 1;
     for(int i = x - 1; i >= 0; --i) {
         if(j >= 0) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1) {
+            if(squares[i][j].second->getColor() == Color::None) {
                 v.push_back({i,j});
-            } else if (this->getColor() != Chessboard::figures[i][j]->getColor()){
+            } else if (this->getColor() != squares[i][j].second->getColor()){
                 v.push_back({i,j});
                 j = -1;
             } else {
@@ -20,13 +20,13 @@ QVector<std::pair<int,int>> Bishop::canMove() const  {
             }
         }
         if(k < 8) {
-            if(Chessboard::figures[i][k]->getCoordinates().first == -1) {
+            if(squares[i][k].second->getColor() == Color::None) {
                 v.push_back({i,k});
-            } else if(this->getColor() != Chessboard::figures[i][k]->getColor()) {
+            } else if (this->getColor() != squares[i][k].second->getColor()){
                 v.push_back({i,k});
                 k = 8;
             } else {
-                k = 8;
+                j = 8;
             }
         }
         --j;
@@ -36,9 +36,9 @@ QVector<std::pair<int,int>> Bishop::canMove() const  {
     j = y - 1, k = y + 1;
     for(int i = x + 1; i < 8; ++i) {
         if(j >= 0) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1) {
+            if(squares[i][j].second->getColor() == Color::None) {
                 v.push_back({i,j});
-            } else if (this->getColor() != Chessboard::figures[i][j]->getColor()){
+            } else if (this->getColor() != squares[i][j].second->getColor()){
                 v.push_back({i,j});
                 j = -1;
             } else {
@@ -46,13 +46,13 @@ QVector<std::pair<int,int>> Bishop::canMove() const  {
             }
         }
         if(k < 8) {
-            if(Chessboard::figures[i][k]->getCoordinates().first == -1) {
+            if(squares[i][k].second->getColor() == Color::None) {
                 v.push_back({i,k});
-            } else if(this->getColor() != Chessboard::figures[i][k]->getColor()) {
+            } else if (this->getColor() != squares[i][k].second->getColor()){
                 v.push_back({i,k});
                 k = 8;
             } else {
-                k = 8;
+                j = 8;
             }
         }
         --j;
@@ -60,4 +60,15 @@ QVector<std::pair<int,int>> Bishop::canMove() const  {
     }
 
     return v;
+}
+
+QIcon Bishop::returnIcon() {
+    if(this->getColor() == Color::White) {
+        return QIcon(":/Icons1/icons/white-bishop.png");
+    }
+    return QIcon(":/Icons1/icons/black-bishop.png");
+};
+
+Bishop* Bishop::clone(Color color, int x, int y) {
+    return new Bishop(color,x, y);
 }
