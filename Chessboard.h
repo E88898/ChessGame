@@ -13,13 +13,14 @@ public:
     ~Chessboard();
     void printBoard();
     Pieces* createPiece(int row, int col, QPushButton* button);
-    static QVector<QVector<Pieces*>> figures;
     void whereToMove(QVector<std::pair<int,int>>& coordinates);
+    void moving(int row, int col);
 signals:
     void onBordClicked(int row, int column);
 private:
     void clickedButton();
     std::vector<std::vector<std::pair<QPushButton*,Pieces*>>> squares;
+    QVector<std::pair<int,int>> whereCanMove;
     QGridLayout* gridLayout;
 };
 

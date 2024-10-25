@@ -6,21 +6,19 @@ Knight::Knight(Color color, int x, int y) : Pieces{color, x, y} {
 
 }
 
-QVector<std::pair<int,int>> Knight::canMove() const  {
+QVector<std::pair<int,int>> Knight::canMove(const std::vector<std::vector<std::pair<QPushButton*,Pieces*>>>& squares) const  {
     int x = Pieces::getCoordinates().first, y = Pieces::getCoordinates().second;
     QVector<std::pair<int,int>> v;
     int i = x - 2, j = y - 1 ;
     if(i >= 0) {
         if(j >= 0) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-               this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
         j = y + 1;
         if(j < 8) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-                this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
@@ -28,15 +26,13 @@ QVector<std::pair<int,int>> Knight::canMove() const  {
     i = x + 2, j = y - 1;
     if(i < 8) {
         if(j >= 0) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-                this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
         j = y + 1;
         if(j < 8) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-                this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
@@ -45,15 +41,13 @@ QVector<std::pair<int,int>> Knight::canMove() const  {
     j = y - 2, i = x - 1;
     if(j >= 0) {
         if(i >= 0) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-                this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
         i = x + 1;
         if(i < 8) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-                this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
@@ -61,15 +55,13 @@ QVector<std::pair<int,int>> Knight::canMove() const  {
     j = y + 2, i = x - 1;
     if(j < 8) {
         if(i >= 0) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-                this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
         i = x + 1;
         if(i < 8) {
-            if(Chessboard::figures[i][j]->getCoordinates().first == -1 ||
-                this->getColor() != Chessboard::figures[i][j]->getColor()) {
+            if(squares[i][j].second->getColor() != this ->getColor()) {
                 v.push_back({i,j});
             }
         }
@@ -77,4 +69,15 @@ QVector<std::pair<int,int>> Knight::canMove() const  {
 
 
     return v;
+}
+
+QIcon Knight::returnIcon() {
+    if(this->getColor() == Color::White) {
+        return QIcon(":/Icons1/icons/white-knight.png");
+    }
+    return QIcon(":/Icons1/icons/black-knight.png");
+};
+
+Knight* Knight::clone(Color color, int x, int y) {
+    return new Knight(color,x, y);
 }

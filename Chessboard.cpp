@@ -14,7 +14,6 @@
 #include "King.h"
 
 
-QVector<QVector<Pieces*>> Chessboard::figures(8,QVector<Pieces*>(8));
 Chessboard::Chessboard(QWidget* parent) : QWidget(parent), squares(8, std::vector<std::pair<QPushButton*,Pieces*>>(8)) {
     setFixedSize(400, 400);
     gridLayout = new QGridLayout(this);
@@ -36,7 +35,6 @@ void Chessboard::printBoard() {
         for (int col = 0; col < boardSize; ++col) {
             QPushButton* button = new QPushButton(this);
             Pieces* piece = createPiece(row,col, button);
-            figures[row][col] = piece;
             squares[row][col] = {button,piece};
             connect(button, &QPushButton::clicked, this, &Chessboard::clickedButton);
             button->setFixedSize(50, 50);
@@ -67,111 +65,147 @@ void Chessboard::printBoard() {
 
 Pieces* Chessboard::createPiece(int row, int col, QPushButton* button) {
     button->setIconSize(QSize(40, 40));
+    Pieces* ptr;
     if(row == 0 && col == 0) {
-        button->setIcon(QIcon(":/Icons1/icons/black-rook.png"));
-        return new Rook(Pieces::Color::Black, row, col);
+        ptr = new Rook(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
     if(row == 0 && col == 7) {
-        button->setIcon(QIcon(":/Icons1/icons/black-rook.png"));
-        return new Rook(Pieces::Color::Black, row, col);
+        ptr = new Rook(Pieces::Color::Black, row, col);;
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 7 && col == 0) {
-        button->setIcon(QIcon(":/Icons1/icons/white-rook.png"));
-        return new Rook(Pieces::Color::White, row, col);
+        ptr = new Rook(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
     if(row == 7 && col == 7) {
-        button->setIcon(QIcon(":/Icons1/icons/white-rook.png"));
-        return new Rook(Pieces::Color::White, row, col);
+        ptr = new Rook(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 0 && col == 1) {
-        button->setIcon(QIcon(":/Icons1/icons/black-knight.png"));
-        return new Knight(Pieces::Color::Black, row, col);
+        ptr = new Knight(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 0 && col == 6) {
-        button->setIcon(QIcon(":/Icons1/icons/black-knight.png"));
-        return new Knight(Pieces::Color::Black, row, col);
+        ptr= new Knight(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 7 && col == 1) {
-        button->setIcon(QIcon(":/Icons1/icons/white-knight.png"));
-        return new Knight(Pieces::Color::White, row, col);
+        ptr =  new Knight(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
     if(row == 7 && col == 6) {
-        button->setIcon(QIcon(":/Icons1/icons/white-knight.png"));
-        return new Knight(Pieces::Color::White, row, col);
+        ptr = new Knight(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 0 && col == 2) {
-        button->setIcon(QIcon(":/Icons1/icons/black-bishop.png"));
-        return new Bishop(Pieces::Color::Black, row, col);
+        ptr = new Bishop(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
     if(row == 0 && col == 5) {
-        button->setIcon(QIcon(":/Icons1/icons/black-bishop.png"));
-        return new Bishop(Pieces::Color::Black, row, col);
+        ptr = new Bishop(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 7 && col == 2) {
-        button->setIcon(QIcon(":/Icons1/icons/white-bishop.png"));
-        return new Bishop(Pieces::Color::White, row, col);
+        ptr = new Bishop(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
     if(row == 7 && col == 5) {
-        button->setIcon(QIcon(":/Icons1/icons/white-bishop.png"));
-        return new Bishop(Pieces::Color::White, row, col);
+        ptr = new Bishop(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 0 && col == 3) {
-        button->setIcon(QIcon(":/Icons1/icons/black-queen.png"));
-        return new Queen(Pieces::Color::Black, row, col);
+        ptr = new Queen(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
     if(row == 7 && col == 3) {
-        button->setIcon(QIcon(":/Icons1/icons/white-queen.png"));
-        return new Queen(Pieces::Color::White, row, col);
+        ptr = new Queen(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 4 && col == 4) {
-        button->setIcon(QIcon(":/Icons1/icons/white-queen.png"));
-        return new Queen(Pieces::Color::White, row, col);
+        ptr = new Queen(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 0 && col == 4) {
-        button->setIcon(QIcon(":/Icons1/icons/black-king.png"));
-        return new King(Pieces::Color::Black, row, col);
+        ptr = new King(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 7 && col == 4) {
-        button->setIcon(QIcon(":/Icons1/icons/white-king.png"));
-        return new King(Pieces::Color::White, row, col);
+        ptr = new King(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 1 ) {
-        button->setIcon(QIcon(":/Icons1/icons/black-pawn.png"));
-        return new Pawn(Pieces::Color::Black, row, col);
+        ptr = new Pawn(Pieces::Color::Black, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
     }
 
     if(row == 6 ) {
-        button->setIcon(QIcon(":/Icons1/icons/white-pawn.png"));
-        return new Pawn(Pieces::Color::White, row, col);
+        ptr = new Pawn(Pieces::Color::White, row, col);
+        button->setIcon(ptr->returnIcon());
+        return ptr;
 
     }
+
     return new None(Pieces::Color::None, -1, -1);
 }
 
 
 void Chessboard::clickedButton() {
     QPushButton* clicked = qobject_cast<QPushButton*>(sender());
-    QVector<std::pair<int,int>> v;
-    for(int i = 0; i < 8; ++i) {
-        for(int j = 0; j < 8; ++j) {
-            if(clicked == squares[i][j].first) {
-                v = squares[i][j].second->canMove();
-                break;
+    if(whereCanMove.size() == 0) {
+        QVector<std::pair<int,int>> v;
+        for(int i = 0; i < 8; ++i) {
+            for(int j = 0; j < 8; ++j) {
+                if(clicked == squares[i][j].first) {
+                    v = squares[i][j].second->canMove(squares);
+                    v.push_back({i,j});
+                    break;
+                }
             }
         }
+        whereCanMove = v;
+        whereToMove(v);
+    } else {
+        for(int i = 0; i < 8; ++i) {
+            for(int j = 0; j < 8; ++j) {
+                if(clicked == squares[i][j].first) {
+                    moving(i,j);
+                }
+            }
+        }
+        whereCanMove.clear();
+
     }
-    whereToMove(v);
+
 
 }
 
@@ -186,3 +220,27 @@ void Chessboard::whereToMove(QVector<std::pair<int,int>>& coordinates) {
         );
     }
 }
+
+
+void Chessboard::moving(int i, int j) {
+    int last = whereCanMove.size() - 1;
+    int x = whereCanMove[last].first, y = whereCanMove[last].second;
+    for(int idx = 0; idx < whereCanMove.size() - 1; ++idx) {
+        if(i == whereCanMove[idx].first && j == whereCanMove[idx].second) {
+
+
+            Pieces* ptr = squares[x][y].second->clone(squares[x][y].second->getColor(),i,j);
+            delete squares[x][y].second;
+            delete squares[i][j].second;
+            squares[x][y].second = new None(Pieces::Color::None, -1, -1);
+            squares[i][j].second = ptr;
+            squares[x][y].first->setIcon(squares[x][y].second->returnIcon());
+            squares[i][j].first->setIcon(squares[i][j].second->returnIcon());
+
+        }
+
+    }
+
+}
+
+
