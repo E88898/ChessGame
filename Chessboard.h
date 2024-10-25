@@ -15,7 +15,6 @@ public:
     ~Chessboard();
     void printBoard();
     Pieces* createPiece(int row, int col, QPushButton* button);
-
     void whereToMove();
     void moving(int row, int col);
 signals:
@@ -27,7 +26,6 @@ private:
     void undoWhereToMove();
     void clickedButton();
     std::vector<std::vector<std::pair<QPushButton*,Pieces*>>> squares;
-    QVector<std::pair<int,int>> whereCanMove;
     QGridLayout* gridLayout;
     Pieces* activePiece = nullptr;
     QVector<std::pair<int,int>> activeCoordinates;

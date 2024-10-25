@@ -176,39 +176,32 @@ Pieces* Chessboard::createPiece(int row, int col, QPushButton* button) {
 }
 
 
+
 void Chessboard::clickedButton() {
     QPushButton* clicked = qobject_cast<QPushButton*>(sender());
-  //  connect(clicked, &QPushButton::clicked, this, Chessboard::openDialog(new Pawn(Pieces::Color::White, 0,0)));
-    if (activePiece) {
-        undoWhereToMove();
-    }
 
-    if(whereCanMove.size() == 0) {
-        QVector<std::pair<int,int>> v;
+    if(activeCoordinates.size() == 0) {
         for(int i = 0; i < 8; ++i) {
             for(int j = 0; j < 8; ++j) {
-                if(clicked == squares[i][j].first) {
-                    v = squares[i][j].second->canMove(squares);
-                    v.push_back({i,j});
+                if (clicked == squares[i][j].first) {
+                    activeCoordinates = squares[i][j].second->canMove(squares);
+                    activeCoordinates.push_back({i,j});
+                    activePiece = squares[i][j].second;
                     break;
                 }
             }
         }
-        whereCanMove = v;
-        whereToMove(v);
+        whereToMove();
     } else {
         for(int i = 0; i < 8; ++i) {
             for(int j = 0; j < 8; ++j) {
                 if(clicked == squares[i][j].first) {
                     moving(i,j);
+                    activeCoordinates.clear();
                 }
             }
         }
-        whereCanMove.clear();
-
     }
-
-    whereToMove();
 
 }
 
@@ -216,11 +209,9 @@ void Chessboard::pawnPromotion(Pawn* piece, int row, int col) {
     int currRow = piece->getCoordinates().first;
     int currCol = piece->getCoordinates().second;
     Pieces* newPiece = openDialog(piece);
-    figures[row][col] = newPiece;
     squares[row][col].second = newPiece;
 
     None* none = new None(piece->getColor(),currRow,currCol);
-    figures[currRow][currCol] = none;
     squares[currRow][currCol].second = none;
 }
 
@@ -234,7 +225,7 @@ void Chessboard::whereToMove() {
                       QPushButton::hover {
                           background-color: #5d5b59;
                       })";
-    for(int i = 0; i < activeCoordinates.size(); ++i) {
+    for(int i = 0; i < activeCoordinates.size() - 1; ++i) {
         qDebug() << activeCoordinates[i].first << ' ' << activeCoordinates[i].second;
         int row = activeCoordinates[i].first;
         int col = activeCoordinates[i].second;
@@ -251,7 +242,7 @@ void Chessboard::whereToMove() {
 
 
 void Chessboard::undoWhereToMove() {
-    QColor backGroundColor;
+    QString backGroundColor;
     QString baseStyle = R"(QPushButton {
                           border: 1px solid white;
                           background-color: %1;
@@ -266,7 +257,7 @@ void Chessboard::undoWhereToMove() {
     } else {
         backGroundColor = "#b58863";
     }
-    squares[activePiece->getCoordinates().first][activePiece->getCoordinates().second].first->setStyleSheet(baseStyle.arg(backGroundColor.name()));
+    // squares[activePiece->getCoordinates().first][activePiece->getCoordinates().second].first->setStyleSheet("");
 
     for(int i = 0; i < activeCoordinates.size(); ++i) {
         int row = activeCoordinates[i].first;
@@ -336,10 +327,11 @@ Pieces* Chessboard::openDialog(Pawn* pawn) {
 }
 
 void Chessboard::moving(int i, int j) {
-    int last = whereCanMove.size() - 1;
-    int x = whereCanMove[last].first, y = whereCanMove[last].second;
-    for(int idx = 0; idx < whereCanMove.size() - 1; ++idx) {
-        if(i == whereCanMove[idx].first && j == whereCanMove[idx].second) {
+    int last = activeCoordinates.size() - 1;
+    int x = activeCoordinates[last].first;
+    int y = activeCoordinates[last].second;
+    for(int idx = 0; idx < last; ++idx) {
+        if(i == activeCoordinates[idx].first && j == activeCoordinates[idx].second) {
 
 
             Pieces* ptr = squares[x][y].second->clone(squares[x][y].second->getColor(),i,j);
@@ -349,10 +341,10 @@ void Chessboard::moving(int i, int j) {
             squares[i][j].second = ptr;
             squares[x][y].first->setIcon(squares[x][y].second->returnIcon());
             squares[i][j].first->setIcon(squares[i][j].second->returnIcon());
-
         }
 
     }
+    undoWhereToMove();
 
 }
 
