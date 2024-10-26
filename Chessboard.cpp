@@ -34,7 +34,7 @@ void Chessboard::printBoard() {
             squares[row][col] = {button,piece};
             connect(button, &QPushButton::clicked, this, &Chessboard::clickedButton);
             button->setFixedSize(50, 50);
-            QColor backGroundColor;
+            QString backGroundColor;
             QString baseStyle = R"(QPushButton {
                           border: 1px solid white;
                           background-color: %1;
@@ -48,7 +48,7 @@ void Chessboard::printBoard() {
             } else {
                 backGroundColor = "#b58863";
             }
-            button->setStyleSheet(baseStyle.arg(backGroundColor.name()));
+            button->setStyleSheet(baseStyle.arg(backGroundColor));
             gridLayout->addWidget(button, row, col);
         }
     }
@@ -205,14 +205,25 @@ void Chessboard::clickedButton() {
 
 }
 
-void Chessboard::pawnPromotion(Pawn* piece, int row, int col) {
-    int currRow = piece->getCoordinates().first;
-    int currCol = piece->getCoordinates().second;
-    Pieces* newPiece = openDialog(piece);
-    squares[row][col].second = newPiece;
+void Chessboard::pawnPromotion(int row, int col) {
+    int last = activeCoordinates.size()-1;
+    int currRow = activeCoordinates[last].first;
+    int currCol = activeCoordinates[last].second;
 
-    None* none = new None(piece->getColor(),currRow,currCol);
-    squares[currRow][currCol].second = none;
+    for(int idx = 0; idx < last; ++idx) {
+        if(row == activeCoordinates[idx].first && col == activeCoordinates[idx].second) {
+            Pieces* newPiece = openDialog(row,col);
+            delete squares[currRow][currCol].second;
+            delete squares[row][col].second;
+            squares[currRow][currCol].second = new None(Pieces::Color::None, -1, -1);
+            squares[row][col].second = newPiece;
+            squares[currRow][currCol].first->setIcon(squares[currRow][currCol].second->returnIcon());
+            squares[row][col].first->setIcon(squares[row][col].second->returnIcon());
+        }
+    }
+
+    // None* none = new None(Pieces::Color::None,currRow,currCol);
+    // squares[currRow][currCol].second = none;
 }
 
 
@@ -284,7 +295,7 @@ void Chessboard::undoWhereToMove() {
     }
 }
 
-Pieces* Chessboard::openDialog(Pawn* pawn) {
+Pieces* Chessboard::openDialog(int row, int col) {
     QDialog dialog(this);
     dialog.resize(200,200);
     dialog.setWindowTitle("choose a figure");
@@ -304,9 +315,11 @@ Pieces* Chessboard::openDialog(Pawn* pawn) {
     knightButton->setIcon(QIcon(":/Icons1/icons/white-knight.png"));
     knightButton->setIconSize(QSize(40,40));
 
-    Pieces::Color color = pawn->getColor();
-    int row = pawn->getCoordinates().first;
-    int col = pawn->getCoordinates().second;
+    int last = activeCoordinates.size()-1;
+    int currRow = activeCoordinates[last].first;
+    int currCol = activeCoordinates[last].second;
+    Pieces* piece = squares[currRow][currCol].second;
+    Pieces::Color color = piece->getColor();
 
     Pieces* acceptedPiece = nullptr;
 
@@ -329,10 +342,16 @@ void Chessboard::moving(int i, int j) {
     int last = activeCoordinates.size() - 1;
     int x = activeCoordinates[last].first;
     int y = activeCoordinates[last].second;
+    if (dynamic_cast<Pawn*>(squares[x][y].second)) {
+        if (squares[x][y].second->isPromotable() == true) {
+            pawnPromotion(i,j);
+            undoWhereToMove();
+            return;
+            }
+        }
+
     for(int idx = 0; idx < last; ++idx) {
         if(i == activeCoordinates[idx].first && j == activeCoordinates[idx].second) {
-
-
             Pieces* ptr = squares[x][y].second->clone(squares[x][y].second->getColor(),i,j);
             delete squares[x][y].second;
             delete squares[i][j].second;
@@ -341,7 +360,6 @@ void Chessboard::moving(int i, int j) {
             squares[x][y].first->setIcon(squares[x][y].second->returnIcon());
             squares[i][j].first->setIcon(squares[i][j].second->returnIcon());
         }
-
     }
     undoWhereToMove();
 

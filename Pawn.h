@@ -8,5 +8,6 @@ public:
     QVector<std::pair<int,int>> canMove(const std::vector<std::vector<std::pair<QPushButton*,Pieces*>>>& squares) const override;
     virtual QIcon returnIcon() override;
     virtual Pawn* clone(Color color, int x, int y) override;
+    bool isPromotable() override;
 };
 #endif // PAWN_H

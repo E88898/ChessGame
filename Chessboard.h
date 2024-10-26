@@ -19,9 +19,9 @@ public:
     void moving(int row, int col);
 signals:
     void onBordClicked(int row, int column);
-    void pawnPromotion(Pawn* pawn, int row, int column);
+    void pawnPromotion(int row, int column);
 public slots:
-    Pieces* openDialog(Pawn* pawn);
+    Pieces* openDialog(int row, int col);
 private:
     void undoWhereToMove();
     void clickedButton();

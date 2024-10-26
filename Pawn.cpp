@@ -3,6 +3,14 @@
 
 Pawn::Pawn(Color color, int x, int y) : Pieces{color,x,y } {}
 
+bool Pawn::isPromotable() {
+    if ((this->getColor() == Color::Black && this->getCoordinates().first == 6) ||
+        (this->getColor() == Color::White && this->getCoordinates().first == 1)) {
+        return true;
+    }
+    return false;
+}
+
 QVector<std::pair<int,int>> Pawn::canMove(const std::vector<std::vector<std::pair<QPushButton*,Pieces*>>>& squares) const  {
     int x = Pieces::getCoordinates().first, y = Pieces::getCoordinates().second;
     QVector<std::pair<int,int>> v;
@@ -33,7 +41,6 @@ QVector<std::pair<int,int>> Pawn::canMove(const std::vector<std::vector<std::pai
     }
 
     if(this->getColor() == Color::White) {
-
         if(x == 6) {
             if(squares[x - 1][y].second->getColor() == Color::None && squares[x - 2][y].second->getColor() == Color::None) {
                 v.push_back({x-2,y});
@@ -45,7 +52,7 @@ QVector<std::pair<int,int>> Pawn::canMove(const std::vector<std::vector<std::pai
             }
         }
         if(y + 1 < 8 ) {
-            if(squares[x - 1][y + 2].second->getColor() ==  Color::Black) {
+            if(squares[x - 1][y + 1].second->getColor() ==  Color::Black) {
                 v.push_back({x - 1,y + 1});
             }
         }

@@ -14,6 +14,7 @@ public:
     };
     virtual ~Pieces() {};
     virtual QVector<std::pair<int,int>> canMove(const std::vector<std::vector<std::pair<QPushButton*,Pieces*>>>& squares) const = 0;
+    virtual bool isPromotable() { return 0; };
     Color getColor() const { return color; }
     std::pair<int,int> getCoordinates() const { return data; }
     virtual Pieces* clone(Color color, int x, int y) = 0;
