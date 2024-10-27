@@ -221,9 +221,6 @@ void Chessboard::pawnPromotion(int row, int col) {
             squares[row][col].first->setIcon(squares[row][col].second->returnIcon());
         }
     }
-
-    // None* none = new None(Pieces::Color::None,currRow,currCol);
-    // squares[currRow][currCol].second = none;
 }
 
 
@@ -300,26 +297,34 @@ Pieces* Chessboard::openDialog(int row, int col) {
     dialog.resize(200,200);
     dialog.setWindowTitle("choose a figure");
 
-    QGridLayout* layout = new QGridLayout(&dialog);
-    QLabel* label = new QLabel("Choose a figure", &dialog);
-    QPushButton* queenButton = new QPushButton(&dialog);
-    queenButton->setIcon(QIcon(":/Icons1/icons/white-queen.png"));
-    queenButton->setIconSize(QSize(40,40));
-    QPushButton* bishopButton = new QPushButton(&dialog);
-    bishopButton->setIcon(QIcon(":/Icons1/icons/white-bishop.png"));
-    bishopButton->setIconSize(QSize(40,40));
-    QPushButton* rookButton = new QPushButton(&dialog);
-    rookButton->setIcon(QIcon(":/Icons1/icons/white-rook.png"));
-    rookButton->setIconSize(QSize(40,40));
-    QPushButton* knightButton = new QPushButton(&dialog);
-    knightButton->setIcon(QIcon(":/Icons1/icons/white-knight.png"));
-    knightButton->setIconSize(QSize(40,40));
-
     int last = activeCoordinates.size()-1;
     int currRow = activeCoordinates[last].first;
     int currCol = activeCoordinates[last].second;
     Pieces* piece = squares[currRow][currCol].second;
     Pieces::Color color = piece->getColor();
+
+    QGridLayout* layout = new QGridLayout(&dialog);
+    QLabel* label = new QLabel("Choose a figure", &dialog);
+    QPushButton* queenButton = new QPushButton(&dialog);
+    queenButton->setIconSize(QSize(40,40));
+    QPushButton* bishopButton = new QPushButton(&dialog);
+    bishopButton->setIconSize(QSize(40,40));
+    QPushButton* rookButton = new QPushButton(&dialog);
+    rookButton->setIconSize(QSize(40,40));
+    QPushButton* knightButton = new QPushButton(&dialog);
+    knightButton->setIconSize(QSize(40,40));
+
+    if (color == Pieces::Color::White) {
+        queenButton->setIcon(QIcon(":/Icons1/icons/white-queen.png"));
+        bishopButton->setIcon(QIcon(":/Icons1/icons/white-bishop.png"));
+        rookButton->setIcon(QIcon(":/Icons1/icons/white-rook.png"));
+        knightButton->setIcon(QIcon(":/Icons1/icons/white-knight.png"));
+    } else {
+        queenButton->setIcon(QIcon(":/Icons1/icons/black-queen.png"));
+        bishopButton->setIcon(QIcon(":/Icons1/icons/black-bishop.png"));
+        rookButton->setIcon(QIcon(":/Icons1/icons/black-rook.png"));
+        knightButton->setIcon(QIcon(":/Icons1/icons/black-knight.png"));
+    }
 
     Pieces* acceptedPiece = nullptr;
 
