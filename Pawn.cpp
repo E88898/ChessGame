@@ -45,7 +45,7 @@ QVector<std::pair<int,int>> Pawn::canMove(const std::vector<std::vector<std::pai
             }
         }
         if(y + 1 < 8 ) {
-            if(squares[x - 1][y + 2].second->getColor() ==  Color::Black) {
+            if(squares[x - 1][y + 1].second->getColor() ==  Color::Black) {
                 v.push_back({x - 1,y + 1});
             }
         }
