@@ -23,12 +23,14 @@ signals:
 public slots:
     Pieces* openDialog(int row, int col);
 private:
+    void checkHelper(const QVector<std::pair<int,int>>& Coordinates);
+    bool check = false;
     void undoWhereToMove();
     void clickedButton();
     std::vector<std::vector<std::pair<QPushButton*,Pieces*>>> squares;
     QGridLayout* gridLayout;
-    Pieces* activePiece = nullptr;
     QVector<std::pair<int,int>> activeCoordinates;
+    int countOfSteps = 1;
 
 };
 

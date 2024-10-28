@@ -50,6 +50,9 @@ QVector<std::pair<int,int>> King::canMove(const std::vector<std::vector<std::pai
         }
     }
 
+
+
+
     return v;
 }
 

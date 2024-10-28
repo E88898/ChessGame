@@ -181,17 +181,25 @@ void Chessboard::clickedButton() {
     QPushButton* clicked = qobject_cast<QPushButton*>(sender());
 
     if(activeCoordinates.size() == 0) {
+
         for(int i = 0; i < 8; ++i) {
             for(int j = 0; j < 8; ++j) {
                 if (clicked == squares[i][j].first) {
-                    activeCoordinates = squares[i][j].second->canMove(squares);
-                    activeCoordinates.push_back({i,j});
-                    activePiece = squares[i][j].second;
+                    if((countOfSteps % 2 == 1 && squares[i][j].second->getColor() == Pieces::Color::White) ||
+                       (countOfSteps % 2 == 0 && squares[i][j].second->getColor() == Pieces::Color::Black)) {
+
+                        activeCoordinates = squares[i][j].second->canMove(squares);
+                        activeCoordinates.push_back({i,j});
+                    }
+
                     break;
                 }
             }
         }
-        whereToMove();
+        if(activeCoordinates.size() > 1) {
+
+            whereToMove();
+        }
     } else {
         for(int i = 0; i < 8; ++i) {
             for(int j = 0; j < 8; ++j) {
@@ -233,7 +241,8 @@ void Chessboard::whereToMove() {
                       QPushButton::hover {
                           background-color: #5d5b59;
                       })";
-    for(int i = 0; i < activeCoordinates.size() - 1; ++i) {
+    int last = activeCoordinates.size() - 1;
+    for(int i = 0; i < last; ++i) {
         qDebug() << activeCoordinates[i].first << ' ' << activeCoordinates[i].second;
         int row = activeCoordinates[i].first;
         int col = activeCoordinates[i].second;
@@ -242,35 +251,19 @@ void Chessboard::whereToMove() {
         } else {
             backGroundColor = "#868482";
         }
-        squares[activeCoordinates[i].first][activeCoordinates[i].second].first->setStyleSheet(baseStyle.arg(backGroundColor));
+        squares[row][col].first->setStyleSheet(baseStyle.arg(backGroundColor));
     }
     backGroundColor = "#FDFD96";
-    squares[activePiece->getCoordinates().first][activePiece->getCoordinates().second].first->setStyleSheet(baseStyle.arg(backGroundColor));
+    squares[activeCoordinates[last].first][activeCoordinates[last].second].first->setStyleSheet(baseStyle.arg(backGroundColor));
 }
 
 
 void Chessboard::undoWhereToMove() {
-    QString backGroundColor;
-    QString baseStyle = R"(QPushButton {
-                          border: 1px solid white;
-                          background-color: %1;
-                      }
-                      QPushButton::hover {
-                          background-color: #5d5b59;
-                      })";
-    int activeRow = activePiece->getCoordinates().first;
-    int activeCol = activePiece->getCoordinates().second;
-    if ((activeRow + activeCol) % 2 == 0) {
-        backGroundColor = "#f0d9b5";
-    } else {
-        backGroundColor = "#b58863";
-    }
-
     for(int i = 0; i < activeCoordinates.size(); ++i) {
         int row = activeCoordinates[i].first;
         int col = activeCoordinates[i].second;
         if ((row + col) % 2 == 0) {
-            squares[activeCoordinates[i].first][activeCoordinates[i].second].first->setStyleSheet(R"(
+            squares[row][col].first->setStyleSheet(R"(
                     QPushButton {
                         border: 1px solid white;
                         background-color: #f0d9b5;
@@ -279,7 +272,7 @@ void Chessboard::undoWhereToMove() {
                     background-color: #5d5b59;
                     })");
         } else {
-            squares[activeCoordinates[i].first][activeCoordinates[i].second].first->setStyleSheet(R"(
+            squares[row][col].first->setStyleSheet(R"(
                     QPushButton {
                         border: 1px solid white;
                         background-color: #b58863;
@@ -364,9 +357,29 @@ void Chessboard::moving(int i, int j) {
             squares[i][j].second = ptr;
             squares[x][y].first->setIcon(squares[x][y].second->returnIcon());
             squares[i][j].first->setIcon(squares[i][j].second->returnIcon());
+
+            QVector<std::pair<int,int>> checkPath = squares[i][j].second->canMove(squares);
+            checkHelper(checkPath);
+
+            ++countOfSteps;
         }
     }
+
     undoWhereToMove();
 
 }
 
+void Chessboard::checkHelper(const QVector<std::pair<int,int>>& coordinates) {
+    int last = coordinates.size() - 1;
+    King* ptr;
+    for(int i = 0; i < last; ++i) {
+        ptr = dynamic_cast<King*>(squares[coordinates[i].first][coordinates[i].second].second);
+        if(ptr) {
+            squares[coordinates[i].first][coordinates[i].second].first->setStyleSheet("background-color: red");
+            check = true;
+            return;
+        }
+    }
+    check = false;
+    return;
+}
